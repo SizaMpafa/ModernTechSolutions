@@ -10,25 +10,15 @@
         methods:{
             showAllEmployeeDetails(employeeId){
                this.selectedEmployee = this.workers.find(worker => worker.employeeId === employeeId)
-                // if(employeeToShow){
-                //     const popUp = document.createElement('fieldset')
-                //     popUp.style.position = "absolute"
-                //     popUp.style.top = "0"
-                //     popUp.innerHTML = `
-                //                         <p>{{employeeToShow.employmentHistory}}</p>
-                //     `
-                //     console.log(popUp);
-                    
-                // }
+            },
+            hideSelectedEmployeeDetails(){
+                this.selectedEmployee = null
             }
         }
     }
 </script>
 
 <template>
-    <!-- <ul>
-        <li v-for="employee in workers" :key="employee.employeeId">{{ employee.name }}</li>
-    </ul> -->
 
     <div class="cards">
         <div class="employee mb-2 border-top pt-3" v-for="employee in workers" :key="employee.employeeId" @click="showAllEmployeeDetails(employee.employeeId)">
@@ -47,24 +37,43 @@
                 </div>
                 <p class="btn btn-primary right-0">{{ employee.department }}</p>
             </div>
-            <fieldset v-if="selectedEmployee && selectedEmployee.employeeId === employee.employeeId" class="popup">
-                <p>{{ selectedEmployee.employmentHistory }}</p>
-            </fieldset>
+            <div v-if="selectedEmployee && selectedEmployee.employeeId === employee.employeeId" class="popup" @click.stop="hideSelectedEmployeeDetails()">
+                <div class=" expanded d-flex">
+                    <div class="sal">
+                        <strong>Salary:</strong><p>R{{ selectedEmployee.salary}}</p>
+                    </div>
+                    <div class="empHis">
+                        <strong>Employment History:</strong><p>{{ selectedEmployee.employmentHistory }}</p>
+                    </div>
+                    <div class="con">
+                        <strong>Contact:</strong><p>{{ selectedEmployee.contact }}</p>
+                    </div>
+                </div>
+                <hr>
+                <button class="btn btn-danger" @click.stop="hideSelectedEmployeeDetails()"> close {{ selectedEmployee.name }}</button>
+            </div>
         </div>
     </div>
 
 </template>
 
 <style>
-.popup {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: white;
-    padding: 1rem;
-    border: 1px solid black;
-    z-index: 999;
-}
+    .expanded{
+        justify-content: space-between;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+    .popup {
+        background: white;
+        padding: 1rem;
+        border: 1px solid black;
+        margin-top: 10px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+    .popup p{
+        font-style: italic;
+    }
 
     .employee{
         position: relative;
