@@ -1,6 +1,11 @@
 <script>
     import store from '@/store';
+    import CreateEmployee from './CreateEmployee.vue';
+    
     export default {
+        components:{
+            CreateEmployee
+        },
         data(){
             return{
                 workers: store.state.employees,
@@ -19,6 +24,7 @@
 </script>
 
 <template>
+    <CreateEmployee/>
     <div class="cards">
         <div class="employee mb-2 border-top pt-3" v-for="employee in workers" :key="employee.employeeId" @click="showAllEmployeeDetails(employee.employeeId)">
             <div class="d-flex">

@@ -9,7 +9,12 @@ const store = createStore({
                      employeesPayRoll: payrollData.payrollData
                 },
                 getters:{},
-                mutations:{},
+                mutations: {
+                              addEmployee(state, employee) {
+                                   state.employees.push(employee);
+                              }
+                              }
+,
                 actions:{}
             })
 export default store
