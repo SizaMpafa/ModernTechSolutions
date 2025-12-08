@@ -4,7 +4,9 @@
 </script>
 
 <template>
-  <TableComponent/>
+  <div class="container">
+    <TableComponent/>
+  </div>
   <!-- <EmployeesComponent/> -->
 </template>
 
