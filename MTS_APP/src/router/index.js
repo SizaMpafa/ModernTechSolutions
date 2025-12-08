@@ -1,4 +1,5 @@
 import EmployeesView from '@/views/EmployeesView.vue'
+import AttendanceView from '@/views/AttendanceView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -8,6 +9,12 @@ const router = createRouter({
       path: '/employees',
       name: 'employees',
       component: EmployeesView
+
+    },
+    {
+      path: '/attendance',
+      name: 'attendance',
+      component: AttendanceView
 
     }
   ],
