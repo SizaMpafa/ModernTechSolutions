@@ -51,6 +51,12 @@ export default {
         };
 
         store.commit('addEmployee', newEmployee);
+
+        this.name = '';
+    this.position = '';
+    this.salary = '';
+    this.department = '';
+    this.employmentHistory = '';
     }
 }
 
@@ -63,7 +69,7 @@ export default {
 
 <!-- Modal toggle -->
 <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="text-black bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none btn btn-primary" type="button">
-    new employee
+    New Employee
 </button>
 
 <!-- Main modal -->
@@ -74,7 +80,7 @@ export default {
             <!-- Modal header -->
             <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
                 <h3 class="text-lg font-medium text-heading">
-                    Create new product
+                    Create New Employee
                 </h3>
                 <button type="button" class="text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center" data-modal-hide="crud-modal">
                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/></svg>
@@ -82,45 +88,57 @@ export default {
                 </button>
             </div>
             <!-- Modal body -->
-            <form action="#">
+            <form @submit.prevent="createEmployee">
                 <div class="grid gap-4 grid-cols-2 py-4 md:py-6">
+                    <!-- Name -->
                     <div class="col-span-2">
-                        <label for="name" class="block mb-2.5 text-sm font-medium text-heading">Name</label>
-                        <input type="text" name="name" id="name" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type Employee Name" required="">
+                        <label for="employee-name" class="block mb-2.5 text-sm font-medium text-heading">Name</label>
+                        <input type="text" id="employee-name" v-model="name" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type Employee Name" required>
                     </div>
+
+                    <!-- Position -->
                     <div class="col-span-2">
-                        <label for="name" class="block mb-2.5 text-sm font-medium text-heading">Position</label>
-                        <input type="text" name="name" id="name" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type Employee Position" required="">
+                        <label for="employee-position" class="block mb-2.5 text-sm font-medium text-heading">Position</label>
+                        <input type="text" id="employee-position" v-model="position" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type Employee Position" required>
                     </div>
+
+                    <!-- Salary -->
                     <div class="col-span-2 sm:col-span-1">
-                        <label for="price" class="block mb-2.5 text-sm font-medium text-heading">Salary</label>
-                        <input type="number" name="price" id="price" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="R80000" required="">
+                        <label for="employee-salary" class="block mb-2.5 text-sm font-medium text-heading">Salary</label>
+                        <input type="number" id="employee-salary" v-model="salary" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="R80000" required>
                     </div>
+
+                    <!-- Department -->
                     <div class="col-span-2 sm:col-span-1">
-                        <label for="category" class="block mb-2.5 text-sm font-medium text-heading">Department</label>
-                        <select v-model="department" class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium rounded-base">
+                        <label for="employee-department" class="block mb-2.5 text-sm font-medium text-heading">Department</label>
+                        <select id="employee-department" v-model="department" class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium rounded-base" required>
                             <option disabled value="">Select department</option>
                             <option v-for="dep in departments" :key="dep" :value="dep">
                                 {{ dep }}
                             </option>
                         </select>
                     </div>
+
+                    <!-- Employment History -->
                     <div class="col-span-2">
-                        <label for="description" class="block mb-2.5 text-sm font-medium text-heading">Product Description</label>
-                        <textarea id="description" rows="4" class="block bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body" placeholder="Write product description here"></textarea>                    
+                        <label for="employee-history" class="block mb-2.5 text-sm font-medium text-heading">Employment History</label>
+                        <textarea id="employee-history" v-model="employmentHistory" rows="4" class="block bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body" placeholder="Write employment history here"></textarea>                    
                     </div>
                 </div>
+
+                <!-- Buttons -->
                 <div class="flex items-center space-x-4 border-t border-default pt-4 md:pt-6">
-                    <button @click.prevent="createEmployee" type="submit"
-                        class="inline-flex items-center text-black bg-brand px-4 py-2.5 rounded-base btn btn-success">
-                        Add new employee
+                    <button type="submit" class="inline-flex items-center text-black bg-brand px-4 py-2.5 rounded-base btn btn-success">
+                        Add New Employee
                     </button>
 
-                    <button data-modal-hide="crud-modal" type="button" class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Cancel</button>
+                    <button data-modal-hide="crud-modal" type="button" class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
+                        Cancel
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-</div> 
+</div>
 
 </template>
