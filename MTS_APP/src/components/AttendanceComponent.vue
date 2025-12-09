@@ -23,7 +23,7 @@ export default {
 },
 
 declineLeaveRequest(employeeId) {
-    const employee = this.attendance.find(emp => emp.employeeId === employeeId);
+        const employee = this.attendance.find(emp => emp.employeeId === employeeId);
     if (!employee) return;
 
     employee.leaveRequests.forEach(request => {

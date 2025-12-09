@@ -6,6 +6,7 @@ import TableComponent from "@/components/TableComponent.vue";
 import EmployeesView from "@/views/EmployeesView.vue";
 import AttendanceView from "@/views/AttendanceView.vue";
 import EmployeeView from "@/views/EmployeeView.vue";
+import PayrollView from '@/views/PayrollView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,10 +48,17 @@ const router = createRouter({
           path: "attendance",
           name: "HRAttendance",
           component: AttendanceView
-        }
-      ]
-    }
-  ]
-});
+        },
+        ,
+        {
+          path: '/payroll',
+          name: 'HRPayroll',
+          component: PayrollView 
+         }
+        ]
+      }
+    ]
+  });
+   
 
 export default router;
