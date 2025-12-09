@@ -1,13 +1,9 @@
 <script setup>
-  import EmployeesComponent from './components/EmployeesComponent.vue';
-  import TableComponent from './components/TableComponent.vue';
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <div class="container">
-    <TableComponent/>
-  </div>
-  <!-- <EmployeesComponent/> -->
+  <RouterView />
 </template>
 
 <style scoped></style>
