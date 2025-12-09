@@ -89,6 +89,8 @@
     .right-0{
         position: absolute;
         right: 0;
+        top: 6px;
+        
     }
     .font-italic{
         font-style: italic;
