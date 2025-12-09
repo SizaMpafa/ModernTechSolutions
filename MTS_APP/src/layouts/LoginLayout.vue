@@ -1,8 +1,6 @@
-<!-- <script>
-</script> -->
 <template>
   <div class="min-h-screen">
-    <RouterView />   <!-- 🔥 THIS loads LoginOptions.vue -->
+    <RouterView />
   </div>
 </template>
 

@@ -94,13 +94,6 @@ declineLeaveRequest(employeeId) {
             }
         }).filter(emp => emp.declinedDays.length > 0)
     }
-    
-
-    // presentEmployees() {
-    //   return this.attendance.filter(emp =>
-    //     emp.attendance.every(day => day.status === "Present")
-    //   );
-    // }
   }
 };
 </script>

@@ -36,10 +36,6 @@
 
                     <p class="text-lowercase  text-center font-italic">{{ employee.position }}</p>
                 </div>
-                <!-- <div class="contSal">
-                    <h5 class="contact">{{ employee.contact }}</h5>
-                    <p class="text-center font-italic">R{{ employee.salary }}</p>
-                </div> -->
                 <p class="btn btn-primary right-0">{{ employee.department }}</p>
             </div>
             <div v-if="selectedEmployee && selectedEmployee.employeeId === employee.employeeId" class="popup" @click.stop="hideSelectedEmployeeDetails()">

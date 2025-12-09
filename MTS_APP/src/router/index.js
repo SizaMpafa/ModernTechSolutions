@@ -49,9 +49,8 @@ const router = createRouter({
           name: "HRAttendance",
           component: AttendanceView
         },
-        ,
         {
-          path: '/payroll',
+          path: 'payroll',
           name: 'HRPayroll',
           component: PayrollView 
          }
