@@ -68,7 +68,7 @@ export default {
     
 
 <!-- Modal toggle -->
-<button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="text-black bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none btn btn-primary" type="button">
+<button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="text-black bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none btn employeee" type="button">
     New Employee
 </button>
 
@@ -76,7 +76,7 @@ export default {
 <div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
         <!-- Modal content -->
-        <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
+        <div class="relative purple-bg border border-rounded rounded-base shadow-sm p-4 md:p-6">
             <!-- Modal header -->
             <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
                 <h3 class="text-lg font-medium text-heading">
@@ -128,11 +128,11 @@ export default {
 
                 <!-- Buttons -->
                 <div class="flex items-center space-x-4 border-t border-default pt-4 md:pt-6">
-                    <button type="submit" class="inline-flex items-center text-black bg-brand px-4 py-2.5 rounded-base btn btn-success">
+                    <button type="submit" class="inline-flex items-center text-black bg-brand px-4 py-2.5 rounded-base btn green">
                         Add New Employee
                     </button>
 
-                    <button data-modal-hide="crud-modal" type="button" class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
+                    <button data-modal-hide="crud-modal" type="button" class="text-body red box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                         Cancel
                     </button>
                 </div>
@@ -142,3 +142,21 @@ export default {
 </div>
 
 </template>
+<style scoped>
+    .green{
+        background-color: green;
+    }
+    .employeee, .purple-bg{
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+    }
+    .border-rounded{
+        border-radius: 12px;
+    }
+    .red{
+        background-color: #ff4d4f;
+        border-color: #ff4d4f;
+        border-radius: 5px;
+        padding:5px;
+        }
+        
+</style>

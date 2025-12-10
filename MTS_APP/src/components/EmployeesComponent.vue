@@ -24,6 +24,7 @@
 </script>
 
 <template>
+
     <CreateEmployee/>
     <div class="cards">
         <div class="employee mb-2 border-top pt-3" v-for="employee in workers" :key="employee.employeeId" @click="showAllEmployeeDetails(employee.employeeId)">
@@ -36,7 +37,7 @@
 
                     <p class="text-lowercase  text-center font-italic">{{ employee.position }}</p>
                 </div>
-                <p class="btn btn-primary right-0">{{ employee.department }}</p>
+                <p class="btn departments right-0">{{ employee.department }}</p>
             </div>
             <div v-if="selectedEmployee && selectedEmployee.employeeId === employee.employeeId" class="popup" @click.stop="hideSelectedEmployeeDetails()">
                 <div class=" expanded d-flex">
@@ -59,6 +60,9 @@
 </template>
 
 <style>
+    .departments{
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+    }
     .expanded{
         justify-content: space-between;
         padding-left: 50px;
