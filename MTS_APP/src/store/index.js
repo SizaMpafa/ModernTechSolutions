@@ -11,7 +11,7 @@ function loadAttendance() {
 
 export default createStore({
   state: {
-    employees: employeesData.employeeInformation,
+    employees: JSON.parse(localStorage.getItem("employees")) || employeesData.employeeInformation,
     employeesAttendance: loadAttendance(),
     employeesPayRoll: payrollData.payrollData,
   },
@@ -71,7 +71,11 @@ export default createStore({
 
       // sync Vuex + LocalStorage
       this.commit("saveAttendance");
-    }
+    },
+    addEmployee(state, newEmployee) {
+    state.employees.push(newEmployee);
+    localStorage.setItem("employees", JSON.stringify(state.employees));
+  },
   },
 
   actions: {

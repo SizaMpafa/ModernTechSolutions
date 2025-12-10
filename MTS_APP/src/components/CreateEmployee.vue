@@ -1,162 +1,117 @@
 <script>
-    import store from '@/store';
+import store from '@/store';
 
 export default {
-    data() {
-        return {
-            name: "",
-            position: "",
-            salary: "",
-            department: "",
-            employmentHistory: "",
-            contact: "",
-
-            // UNIQUE department list
-            departments: [...new Set(store.state.employees.map(e => e.department))]
-        };
-    },
-    computed: {
-                nextEmployeeId() {
-                    const employees = store.state.employees;
-
-                    if (employees.length === 0) {
-                        return 1; // start from 1 if no employees
-                    }
-
-                    const maxId = Math.max(...employees.map(e => e.employeeId));
-                    return maxId + 1;
-                }
-            },
-    methods: {
-    generateEmail(name) {
-        // Convert name to lowercase
-        let emailName = name.toLowerCase();
-
-        // Replace spaces with dots
-        emailName = emailName.replace(/\s+/g, '.');
-
-        // Append domain
-        return `${emailName}@moderntech.com`;
-    },
-
-    createEmployee() {
-        const newEmployee = {
-            employeeId: this.nextEmployeeId, // auto-increment logic
-            name: this.name,
-            position: this.position,
-            salary: this.salary,
-            department: this.department,
-            employmentHistory: this.employmentHistory,
-            contact: this.generateEmail(this.name) // automatically generate email
-        };
-
-        store.commit('addEmployee', newEmployee);
-
-        this.name = '';
-    this.position = '';
-    this.salary = '';
-    this.department = '';
-    this.employmentHistory = '';
+  data() {
+    return {
+      name: "",
+      position: "",
+      salary: "",
+      department: "",
+      employmentHistory: "",
+      contact: "",
+      showModal: false, // <-- reactive modal toggle
+      departments: [...new Set(store.state.employees.map(e => e.department))]
+    };
+  },
+  computed: {
+    nextEmployeeId() {
+      const employees = store.state.employees;
+      if (!employees.length) return 1;
+      return Math.max(...employees.map(e => e.employeeId)) + 1;
     }
-}
+  },
+  methods: {
+    openModal() {
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
+    },
+    generateEmail(name) {
+      return `${name.toLowerCase().replace(/\s+/g, '.')}@moderntech.com`;
+    },
+    createEmployee() {
+      const newEmployee = {
+        employeeId: this.nextEmployeeId,
+        name: this.name,
+        position: this.position,
+        salary: this.salary,
+        department: this.department,
+        employmentHistory: this.employmentHistory,
+        contact: this.generateEmail(this.name)
+      };
 
+      store.commit('addEmployee', newEmployee);
+
+      // Reset form
+      this.name = '';
+      this.position = '';
+      this.salary = '';
+      this.department = '';
+      this.employmentHistory = '';
+
+      // Hide modal after creation
+      this.closeModal();
+    }
+  }
 };
-
 </script>
 
 <template>
-    
-
-<!-- Modal toggle -->
-<button data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="text-black bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none btn employeee" type="button">
+  <!-- New Employee Button -->
+  <button @click="openModal" class="text-black bg-brand ... btn employeee">
     New Employee
-</button>
+  </button>
 
-<!-- Main modal -->
-<div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-md max-h-full">
-        <!-- Modal content -->
-        <div class="relative purple-bg border border-rounded rounded-base shadow-sm p-4 md:p-6">
-            <!-- Modal header -->
-            <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
-                <h3 class="text-lg font-medium text-heading">
-                    Create New Employee
-                </h3>
-                <button type="button" class="text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center" data-modal-hide="crud-modal">
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/></svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <form @submit.prevent="createEmployee">
-                <div class="grid gap-4 grid-cols-2 py-4 md:py-6">
-                    <!-- Name -->
-                    <div class="col-span-2">
-                        <label for="employee-name" class="block mb-2.5 text-sm font-medium text-heading">Name</label>
-                        <input type="text" id="employee-name" v-model="name" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type Employee Name" required>
-                    </div>
+  <!-- Modal -->
+  <div v-if="showModal" class="fixed inset-0 z-50 flex justify-center items-center bg-black/50">
+    <div class="purple-like rounded-lg shadow-lg max-w-md w-full p-6 relative">
+      <!-- Header -->
+      <div class="flex justify-between items-center border-b pb-2 mb-4">
+        <h3 class="text-lg font-medium">Create New Employee</h3>
+        <button @click="closeModal" class="text-xl font-bold">&times;</button>
+      </div>
 
-                    <!-- Position -->
-                    <div class="col-span-2">
-                        <label for="employee-position" class="block mb-2.5 text-sm font-medium text-heading">Position</label>
-                        <input type="text" id="employee-position" v-model="position" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type Employee Position" required>
-                    </div>
-
-                    <!-- Salary -->
-                    <div class="col-span-2 sm:col-span-1">
-                        <label for="employee-salary" class="block mb-2.5 text-sm font-medium text-heading">Salary</label>
-                        <input type="number" id="employee-salary" v-model="salary" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="R80000" required>
-                    </div>
-
-                    <!-- Department -->
-                    <div class="col-span-2 sm:col-span-1">
-                        <label for="employee-department" class="block mb-2.5 text-sm font-medium text-heading">Department</label>
-                        <select id="employee-department" v-model="department" class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium rounded-base" required>
-                            <option disabled value="">Select department</option>
-                            <option v-for="dep in departments" :key="dep" :value="dep">
-                                {{ dep }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Employment History -->
-                    <div class="col-span-2">
-                        <label for="employee-history" class="block mb-2.5 text-sm font-medium text-heading">Employment History</label>
-                        <textarea id="employee-history" v-model="employmentHistory" rows="4" class="block bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body" placeholder="Write employment history here"></textarea>                    
-                    </div>
-                </div>
-
-                <!-- Buttons -->
-                <div class="flex items-center space-x-4 border-t border-default pt-4 md:pt-6">
-                    <button type="submit" class="inline-flex items-center text-black bg-brand px-4 py-2.5 rounded-base btn green">
-                        Add New Employee
-                    </button>
-
-                    <button data-modal-hide="crud-modal" type="button" class="text-body red box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
-                        Cancel
-                    </button>
-                </div>
-            </form>
+      <!-- Form -->
+      <form @submit.prevent="createEmployee" class="space-y-4">
+        <div>
+          <label>Name</label>
+          <input v-model="name" type="text" required class="w-full border px-3 py-2 rounded" />
         </div>
-    </div>
-</div>
+        <div>
+          <label>Position</label>
+          <input v-model="position" type="text" required class="w-full border px-3 py-2 rounded" />
+        </div>
+        <div class="flex gap-4">
+          <div class="flex-1">
+            <label>Salary</label>
+            <input v-model="salary" type="number" required class="w-full border px-3 py-2 rounded" />
+          </div>
+          <div class="flex-1">
+            <label>Department</label>
+            <select v-model="department" required class="w-full border px-3 py-2 rounded">
+              <option disabled value="">Select department</option>
+              <option v-for="dep in departments" :key="dep" :value="dep">{{ dep }}</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label>Employment History</label>
+          <textarea v-model="employmentHistory" rows="3" class="w-full border px-3 py-2 rounded"></textarea>
+        </div>
 
+        <div class="flex justify-end gap-2">
+          <button type="button" @click="closeModal" class="px-4 py-2 bg-red-500 text-white rounded">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded">Add Employee</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
-<style scoped>
-    .green{
-        background-color: green;
+
+<style>
+    .employeee, .purple-like{
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
-    .employeee, .purple-bg{
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
-    }
-    .border-rounded{
-        border-radius: 12px;
-    }
-    .red{
-        background-color: #ff4d4f;
-        border-color: #ff4d4f;
-        border-radius: 5px;
-        padding:5px;
-        }
-        
 </style>
