@@ -35,6 +35,9 @@
           <p><strong>Working Rate (per hour):</strong> R350</p>
           <p><strong>Deduction Rate (per leave unit):</strong> R62.5</p>
           <p><strong>Calculation Note:</strong> Final Salary ≈ Monthly Salary - (Leave Deductions * 62.5)</p>
+               <button @click="generatePayslip(selectedEmployee)" class="payslip-btn btn btn-warning">
+                Generate Payslip
+              </button>
         </div>
       </div>
     </div>
@@ -43,6 +46,7 @@
 
 <script>
 import store from '@/store';
+import jsPDF from "jspdf";
 
 export default {
   name: 'PayrollApp',
@@ -59,6 +63,28 @@ export default {
       },
     hideSelectedEmployeeDetails() {
       this.selectedEmployee = null;
+    },
+    generatePayslip(employee) {
+      const doc = new jsPDF();
+
+      doc.setFontSize(16);
+      doc.text("Payslip", 105, 20, null, null, "center");
+
+      doc.setFontSize(12);
+      doc.text(`Employee ID: ${employee.employeeId}`, 20, 40);
+      doc.text(`Hours Worked: ${employee.hoursWorked}`, 20, 50);
+      doc.text(`Leave Deductions: ${employee.leaveDeductions}`, 20, 60);
+      doc.text(`Monthly Salary: R${employee.salary || "N/A"}`, 20, 70);
+      doc.text(`Final Salary: R${employee.finalSalary}`, 20, 80);
+      doc.text(`Working Rate (per hour): R350`, 20, 90);
+      doc.text(`Deduction Rate (per leave unit): R62.5`, 20, 100);
+      doc.text(
+        `Calculation Note: Final Salary ≈ Monthly Salary - (Leave Deductions * 62.5)`,
+        20,
+        110
+      );
+
+      doc.save(`Payslip_${employee.employeeId}.pdf`);
     }
   }
 };
