@@ -7,6 +7,8 @@ import EmployeesView from "@/views/EmployeesView.vue";
 import AttendanceView from "@/views/AttendanceView.vue";
 import EmployeeView from "@/views/EmployeeView.vue";
 import PayrollView from '@/views/PayrollView.vue'
+import ProfileView from "@/views/ProfileView.vue";
+import RegisterView from "@/views/RegisterView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,7 +26,27 @@ const router = createRouter({
           path: "employee/:id",
           name: "EmployeePage",
           component: EmployeeView,
-          props: true
+          props: true,
+          children:[
+            {
+              path: "",
+              name: "EmployeeWlcome",
+              component: () => import("@/components/EmployeeWelcome.vue"),
+              props: true
+            },
+            {
+              path: "profile",
+              name: "EmployeeProfile",
+              component: ProfileView,
+              props: true
+            },
+            {
+              path: "register",
+              name: "EmployeeRegister",
+              component: RegisterView,
+              props: true
+            }
+          ]
         }
   ]
 }
