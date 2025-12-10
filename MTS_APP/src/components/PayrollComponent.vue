@@ -3,21 +3,22 @@
     <!-- Employee Cards -->
     <div class="cards">
       <div
-        class="employee-card"
-        v-for="payroll in workersPayroll"
-        :key="payroll.employeeId"
-        @click="showAllEmployeeDetails(payroll.employeeId)"
-      >
-        <div class="card-content">
-          <i class="fa-solid fa-user-tie icon"></i>
-          <div class="details">
-            <h6 class="employee-id">Employee ID: {{ payroll.employeeId }}</h6>
-            <p class="hours-worked">Hours Worked: {{ payroll.hoursWorked }}</p>
-            <p class="leave-deductions">Leave Deductions: {{ payroll.leaveDeductions }}</p>
-            <p class="final-salary">Final Salary: R{{ payroll.finalSalary }}</p>
-          </div>
-        </div>
-      </div>
+  class="employee-card"
+  v-for="payroll in payrollWithNames"
+  :key="payroll.employeeId"
+  @click="showAllEmployeeDetails(payroll.employeeId)"
+>
+  <div class="card-content">
+    <i class="fa-solid fa-user-tie icon"></i>
+    <div class="details">
+      <h6 class="employee-name">Employee: {{ payroll.name }}</h6>
+      <p class="hours-worked">Hours Worked: {{ payroll.hoursWorked }}</p>
+      <p class="leave-deductions">Leave Deductions: {{ payroll.leaveDeductions }}</p>
+      <p class="final-salary">Final Salary: R{{ payroll.finalSalary }}</p>
+    </div>
+  </div>
+</div>
+
     </div>
 
     <!-- Modal for Selected Employee Details -->
@@ -26,7 +27,7 @@
         <button class="close-btn" @click="hideSelectedEmployeeDetails">&times;</button>
         <h4>Employee Details</h4>
         <div class="employee-details">
-          <p><strong>Employee ID:</strong> {{ selectedEmployee.employeeId }}</p>
+          <p><strong>Employee:</strong> {{ selectedEmployee.name }}</p>
           <p><strong>Hours Worked:</strong> {{ selectedEmployee.hoursWorked }}</p>
           <p><strong>Leave Deductions:</strong> {{ selectedEmployee.leaveDeductions }}</p>
           <p><strong>Final Salary:</strong> R{{ selectedEmployee.finalSalary }}</p>
@@ -52,41 +53,55 @@ export default {
   name: 'PayrollApp',
   data() {
     return {
-      workersPayroll: store.state.employeesPayRoll || [], // Fallback to empty array if not set
-      selectedEmployee: null
+      // workersPayroll: store.state.employeesPayRoll || [], // Fallback to empty array if not set
+      selectedEmployeeId: null
     };
   },
   methods: {
-    showAllEmployeeDetails(employeename) {
-      // Fixed: Use this.workersPayroll instead of undefined this.workers
-      this.selectedEmployee = this.workersPayroll.find(worker => worker.employeeId === employeename);
-      },
-    hideSelectedEmployeeDetails() {
-      this.selectedEmployee = null;
-    },
-    generatePayslip(employee) {
-      const doc = new jsPDF();
-
-      doc.setFontSize(16);
-      doc.text("Payslip", 105, 20, null, null, "center");
-
-      doc.setFontSize(12);
-      doc.text(`Employee ID: ${employee.employeeId}`, 20, 40);
-      doc.text(`Hours Worked: ${employee.hoursWorked}`, 20, 50);
-      doc.text(`Leave Deductions: ${employee.leaveDeductions}`, 20, 60);
-      doc.text(`Monthly Salary: R${employee.salary || "N/A"}`, 20, 70);
-      doc.text(`Final Salary: R${employee.finalSalary}`, 20, 80);
-      doc.text(`Working Rate (per hour): R350`, 20, 90);
-      doc.text(`Deduction Rate (per leave unit): R62.5`, 20, 100);
-      doc.text(
-        `Calculation Note: Final Salary ≈ Monthly Salary - (Leave Deductions * 62.5)`,
-        20,
-        110
-      );
-
-      doc.save(`Payslip_${employee.employeeId}.pdf`);
-    }
+  showAllEmployeeDetails(employeeId) {
+    this.selectedEmployeeId = employeeId;
+  },
+  hideSelectedEmployeeDetails() {
+    this.selectedEmployeeId = null;
+  },
+  generatePayslip(employee) {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Payslip", 105, 20, null, null, "center");
+    doc.setFontSize(12);
+    doc.text(`Employee ID: ${employee.employeeId}`, 20, 40);
+    doc.text(`Hours Worked: ${employee.hoursWorked}`, 20, 50);
+    doc.text(`Leave Deductions: ${employee.leaveDeductions}`, 20, 60);
+    doc.text(`Monthly Salary: R${employee.salary || "N/A"}`, 20, 70);
+    doc.text(`Final Salary: R${employee.finalSalary}`, 20, 80);
+    doc.text(`Working Rate (per hour): R350`, 20, 90);
+    doc.text(`Deduction Rate (per leave unit): R62.5`, 20, 100);
+    doc.text(`Calculation Note: Final Salary ≈ Monthly Salary - (Leave Deductions * 62.5)`, 20, 110);
+    doc.save(`Payslip_${employee.employeeId}.pdf`);
   }
+},
+
+  computed: {
+  payrollWithNames() {
+    const payrolls = store.state.employeesPayRoll || [];
+    const employees = store.state.employees || [];
+
+    return payrolls.map(payroll => {
+      const employee = employees.find(emp => emp.employeeId === payroll.employeeId);
+      return {
+        ...payroll,
+        name: employee ? employee.name : "Unknown"
+      };
+    });
+  },
+  selectedEmployee() {
+    if (!this.selectedEmployeeId) return null;
+    return this.payrollWithNames.find(p => p.employeeId === this.selectedEmployeeId);
+  }
+}
+
+
+
 };
 </script>
 
