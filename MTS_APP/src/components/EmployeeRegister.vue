@@ -16,34 +16,33 @@ export default {
     employeeAttendance() {
       const employee = store.state.employeesAttendance.find(e => e.employeeId == this.id);
       return employee ? employee.attendance : [];
-    }
-  },
+    },
 
-  data() {
-    return {
-      signedStatus: null,
-    };
+    signedStatus() {
+      const employee = store.state.employeesAttendance.find(e => e.employeeId == this.id);
+      const record = employee?.attendance.find(a => a.date === this.todayDate);
+      return record ? record.status : null;
+    }
   },
 
   methods: {
     signRegister(status) {
       if (this.alreadySigned) return;
 
-      this.signedStatus = status;
-
       const newAttendance = {
         id: this.id,
         newAttendanceRecord: {
           date: this.todayDate,
-          status: status,
-        },
+          status
+        }
       };
 
       store.commit("addRegister", newAttendance);
-    },
-  },
+    }
+  }
 };
 </script>
+
 
 <template>
   <div class="mt-4" style="max-width: 550px; margin: auto;">
@@ -56,9 +55,10 @@ export default {
 
     <!-- Success / Already Signed Message -->
     <div v-if="alreadySigned || signedStatus" class="alert alert-success text-center shadow">
-      <strong>Attendance submitted:</strong>
-      <div>{{ todayDate }} - {{ signedStatus || "Already signed today" }}</div>
-    </div>
+  <strong>Attendance submitted:</strong>
+  <div>{{ todayDate }} - {{ signedStatus || "Already signed today" }}</div>
+</div>
+
 
     <!-- Attendance Card -->
     <div v-else class="card shadow">

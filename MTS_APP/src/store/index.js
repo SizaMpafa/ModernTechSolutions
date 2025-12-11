@@ -9,12 +9,21 @@ function loadAttendance() {
   return saved ? JSON.parse(saved) : attendanceData.attendanceAndLeave;
 }
 
+function normalizeIds(attendance) {
+  return attendance.map(e => ({
+    ...e,
+    employeeId: Number(e.employeeId)
+  }));
+}
+
+
 export default createStore({
   state: {
-    employees: JSON.parse(localStorage.getItem("employees")) || employeesData.employeeInformation,
-    employeesAttendance: loadAttendance(),
-    employeesPayRoll: payrollData.payrollData,
-  },
+  employees: JSON.parse(localStorage.getItem("employees")) || employeesData.employeeInformation,
+  employeesAttendance: normalizeIds(loadAttendance()),
+  employeesPayRoll: payrollData.payrollData,
+},
+
 
   getters: {
     hasSignedToday: (state) => (id) => {
@@ -73,9 +82,22 @@ export default createStore({
       this.commit("saveAttendance");
     },
     addEmployee(state, newEmployee) {
-    state.employees.push(newEmployee);
-    localStorage.setItem("employees", JSON.stringify(state.employees));
-  },
+      newEmployee.employeeId = Number(newEmployee.employeeId);
+
+      state.employees.push(newEmployee);
+      localStorage.setItem("employees", JSON.stringify(state.employees));
+
+      state.employeesAttendance.push({
+        employeeId: newEmployee.employeeId,
+        attendance: [],
+        leaveRequests: []
+      });
+
+      localStorage.setItem("employeesAttendance",
+        JSON.stringify(state.employeesAttendance)
+      );
+    }
+
   },
 
   actions: {

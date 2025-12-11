@@ -64,11 +64,6 @@ const router = createRouter({
       component: HRLayout,
       children: [
         {
-          path: "",
-          name: "HRDashboard",
-          component: TableComponent 
-        },
-        {
           path: "employees",
           name: "HREmployees",
           component: EmployeesView

@@ -13,7 +13,7 @@ const showLoginForm = ref(false)
     <div class="login-buttons">
       <!-- HR LOGIN -->
       <RouterLink
-        to="/hr"
+        to="/hr/employees"
         class="btn hr-btn"
       >
         Login as HR
