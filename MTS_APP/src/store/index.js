@@ -65,12 +65,12 @@ export default createStore({
   actions: {
     async fetchEmployees({ commit }) {
       const { employees } =
-        await (await fetch("http://localhost:1111/employees")).json();
+        await (await fetch("mts-backend.up.railway.app/employees")).json();
       commit("setEmployees", employees);
     },
 
     async createEmployee({ commit }, employeeData) {
-      const res = await fetch("http://localhost:1111/employees", {
+      const res = await fetch("mts-backend.up.railway.app/employees", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(employeeData)
@@ -82,7 +82,7 @@ export default createStore({
 
     async updateEmployee({ commit }, { employee_Id, updates }) {
       const res = await fetch(
-        `http://localhost:1111/employees/${employee_Id}`,
+        `mts-backend.up.railway.app/employees/${employee_Id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -96,7 +96,7 @@ export default createStore({
 
     async deleteEmployee({ commit }, employee_Id) {
       const res = await fetch(
-        `http://localhost:1111/employees/${employee_Id}`,
+        `mts-backend.up.railway.app/employees/${employee_Id}`,
         { method: "DELETE" }
       );
 
@@ -106,20 +106,20 @@ export default createStore({
 
     async fetchAttendance({ commit }) {
       const { attendance } =
-        await (await fetch("http://localhost:1111/attendance")).json();
+        await (await fetch("mts-backend.up.railway.app/attendance")).json();
       commit("setAttendance", attendance);
     },
 
     async fetchLeaveRequests({ commit }) {
       const response =
-        await (await fetch("http://localhost:1111/leave_requests")).json();
+        await (await fetch("mts-backend.up.railway.app/leave_requests")).json();
 
       // BACKEND KEY IS `leave_request`
       commit("setLeaveRequests", response.leave_request);
     },
     async fetchPayroll({ commit }) {
       const {payroll} =
-        await (await fetch("http://localhost:1111/payroll")).json();
+        await (await fetch("mts-backend.up.railway.app/payroll")).json();
 
       // BACKEND KEY IS `leave_request`
       commit("setPayroll", payroll);
@@ -129,7 +129,7 @@ export default createStore({
 
     async approveLeave({ commit }, { leave_request_id, employee_id }) {
       await fetch(
-        `http://localhost:1111/employee/${employee_id}/leave_request/${leave_request_id}`,
+        `mts-backend.up.railway.app/employee/${employee_id}/leave_request/${leave_request_id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -146,7 +146,7 @@ export default createStore({
 
     async declineLeave({ commit }, { leave_request_id, employee_id }) {
       await fetch(
-        `http://localhost:1111/employee/${employee_id}/leave_request/${leave_request_id}`,
+        `mts-backend.up.railway.app/employee/${employee_id}/leave_request/${leave_request_id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
